@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9F6E9"
+    tools:context=".infoActivity">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/back"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        app:backgroundTint="#B7AC9B"
+        app:cornerRadius="14dp"
+        app:icon="@drawable/arrow"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconTint="#FFFFFF"
+        android:layout_margin="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/liner_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/jungleadvantures"
+            android:text="\n2048 oʻyini bilan miyangizni chiniqtiring va eng yuqori natijani zabt eting!\n\nBu oddiy, ammo oʻziga rom etuvchi boshqotirma oʻyini boʻlib, unda siz sonlarni birlashtirib, sehrli 2048 koshiniga yetib borishingiz kerak.\n\nQanday oʻynaladi?\n\n• Ekran boʻylab koshinlarni 4 tomonga (tepaga, pastga, chapga, oʻngga) suring.\n• Bir xil songa ega boʻlgan ikkita koshin bir-biriga tegganda, ular qoʻshilib, bitta kashinga aylanadi (masalan: 2+2=4, 4+4=8, ..., 1024+1024=2048).\n\nMaqsad — maydon toʻlib qolmasidan oldin 2048 koshinini hosil qilish!\n shahzod developer!"
+            android:textAlignment="center"
+            android:textColor="#706B5F"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/liner_tv">
+
+        <ImageView
+            android:id="@+id/btn_linkedIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="100dp"
+            android:backgroundTint="#15FFFFFF"
+            android:src="@drawable/ic_linkedin" />
+
+        <ImageView
+            android:id="@+id/btn_github"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/ic_github" />
+
+        <ImageView
+            android:id="@+id/btn_telegram"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:backgroundTint="#15FFFFFF"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_telegram" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

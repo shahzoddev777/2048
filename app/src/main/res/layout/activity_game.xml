@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9F6E9"
+    android:fillViewport="true"
+    tools:context=".game">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            app:backgroundTint="#B7AC9B"
+            app:cornerRadius="14dp"
+            app:icon="@drawable/arrow"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconTint="#FFFFFF"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/pac"
+            android:text="2048"
+            android:textColor="#706B5F"
+            android:textSize="44sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/back"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.589"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/back"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <LinearLayout
+            android:id="@+id/scoreContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="120dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/back">
+
+            <LinearLayout
+                android:layout_width="80dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/button_bg"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/jungleadvantures"
+                    android:text="SCORE"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/currenttxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/jungleadvantures"
+                    android:text="0"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="80dp"
+                android:layout_height="60dp"
+                android:background="@drawable/button_bg"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/jungleadvantures"
+                    android:text="BEST"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/recordtxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/jungleadvantures"
+                    android:text="0"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@id/scoreContainer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/scoreContainer">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/backtxt"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                app:backgroundTint="#B7AC9B"
+                app:cornerRadius="12dp"
+                app:icon="@drawable/ic_undo"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconTint="#FFFFFF" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/restarttxt"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                app:backgroundTint="#B7AC9B"
+                app:cornerRadius="12dp"
+                app:icon="@drawable/ic_refresh"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconTint="#FFFFFF" />
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            app:cardBackgroundColor="#B7AC9B"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/scoreContainer"
+            app:strokeColor="#E0D7C6"
+            app:strokeWidth="1dp">
+
+            <GridLayout
+                android:id="@+id/gameGrid"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:columnCount="4"
+                android:padding="8dp"
+                android:rowCount="4">
+
+                <TextView
+                    style="@style/TileStyle"
+                    android:background="@drawable/bg_title_0"
+                    android:text="0" />
+
+                <TextView
+                    style="@style/TileStyle"
+                    android:background="@drawable/bg_title_0"
+                    android:text="0" />
+
+                <TextView
+                    style="@style/TileStyle"
+                    android:background="@drawable/bg_title_0"
+                    android:text="0" />
+
+                <TextView
+                    style="@style/TileStyle"
+                    android:background="@drawable/bg_title_0"
+                    android:text="0" />
+
+                <TextView
+                    style="@style/TileStyle"
+                    android:background="@drawable/bg_title_0"
+                    android:text="0" />
+
+                <TextView
+                    style="@style/TileStyle"
+                    android:background="@drawable/bg_title_0"
+                    android:text="0" />
+
+                <TextView
+                    style="@style/TileStyle"
+                    android:background="@drawable/bg_title_0"
+                    android:text="0" />
+
+                <TextView
+                    style="@style/TileStyle"
+                    android:background="@drawable/bg_title_0"
+                    android:text="0" />
+
+                <TextView
+                    style="@style/TileStyle"
+                    android:background="@drawable/bg_title_0"
+                    android:text="0" />
+
+                <TextView
+                    style="@style/TileStyle"
+                    android:background="@drawable/bg_title_0"
+                    android:text="0" />
+
+                <TextView
+                    style="@style/TileStyle"
+                    android:background="@drawable/bg_title_0"
+                    android:text="0" />
+
+                <TextView
+                    style="@style/TileStyle"
+                    android:background="@drawable/bg_title_0"
+                    android:text="0" />
+
+                <TextView
+                    style="@style/TileStyle"
+                    android:background="@drawable/bg_title_0"
+                    android:text="0" />
+
+                <TextView
+                    style="@style/TileStyle"
+                    android:background="@drawable/bg_title_0"
+                    android:text="0" />
+
+                <TextView
+                    style="@style/TileStyle"
+                    android:background="@drawable/bg_title_0"
+                    android:text="0" />
+
+                <TextView
+                    style="@style/TileStyle"
+                    android:background="@drawable/bg_title_0"
+                    android:text="0" />
+
+            </GridLayout>
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
