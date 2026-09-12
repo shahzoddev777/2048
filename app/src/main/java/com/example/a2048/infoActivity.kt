@@ -1,10 +1,7 @@
 package com.example.a2048
 
-import android.content.ClipData.newIntent
-import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -31,7 +28,7 @@ class infoActivity : AppCompatActivity() {
                 start()
                 setOnCompletionListener { release() }
             }
-            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
         binding.btnGithub.setOnClickListener {
             MediaPlayer.create(this, R.raw.music_click)?.apply {

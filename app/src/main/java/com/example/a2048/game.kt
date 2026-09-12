@@ -1,7 +1,6 @@
 package com.example.a2048
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
@@ -77,7 +76,6 @@ class game : AppCompatActivity() {
                 "Ha",
                 "Yo'q",
                 onPositive = {
-                    startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 },
                 onNegative = {}
@@ -220,7 +218,6 @@ class game : AppCompatActivity() {
                 shared.edit().putBoolean("has_saved", false).apply()
             },
             onNegative = {
-                startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }
         )
