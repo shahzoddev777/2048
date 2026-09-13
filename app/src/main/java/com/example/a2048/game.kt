@@ -16,21 +16,11 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.a2048.databinding.ActivityGameBinding
 import com.example.a2048.databinding.DialogCustomBinding
 
-class game : AppCompatActivity() {
+class game : AppCompatActivity(), GameContract.View {
     private lateinit var binding: ActivityGameBinding
-    private val repository = GameRepository()
+    private lateinit var presenter: GameContract.Presenter
+    private lateinit var settings: SettingsManager
     private val list = ArrayList<TextView>()
-    private val shared by lazy { getSharedPreferences("GamePrefens", MODE_PRIVATE) }
-    private var isWonDialogShown = false
-
-    private var previousMatrix = arrayOf(
-        arrayOf(0, 0, 0, 0),
-        arrayOf(0, 0, 0, 0),
-        arrayOf(0, 0, 0, 0),
-        arrayOf(0, 0, 0, 0)
-    )
-    private var previousScore = 0
-    private var canUndo = false
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,192 +28,74 @@ class game : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        settings = SettingsManager(this)
+        presenter = GamePresenter(this, GameRepository(), settings)
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        binding.restarttxt.setOnClickListener {
-            MediaPlayer.create(this, R.raw.music_click)?.apply {
-                start()
-                setOnCompletionListener { release() }
-            }
-            showCustomDialog(
-                "Restart",
-                "Rostdan ham o'yinni qayta boshlamoqchimisiz?",
-                "Ha",
-                "Yo'q",
-                onPositive = {
-                    repository.restart()
-                    isWonDialogShown = false
-                    canUndo = false
-                    showMatrix()
-                    shared.edit().putBoolean("has_saved", false).apply()
-                    showToast("Restart")
-                },
-                onNegative = {}
-            )
-        }
-
-        binding.back.setOnClickListener {
-            MediaPlayer.create(this, R.raw.music_click)?.apply {
-                start()
-                setOnCompletionListener { release() }
-            }
-            showCustomDialog(
-                "Chiqish",
-                "Rostdan ham o'yindan chiqmoqchimisiz?",
-                "Ha",
-                "Yo'q",
-                onPositive = {
-                    finish()
-                },
-                onNegative = {}
-            )
-        }
-        binding.backtxt.setOnClickListener {
-            MediaPlayer.create(this, R.raw.music_click)?.apply {
-                start()
-                setOnCompletionListener { release() }
-            }
-            if (canUndo) {
-                for (i in 0 until 4) {
-                    for (j in 0 until 4) {
-                        repository.matrix[i][j] = previousMatrix[i][j]
-                    }
-                }
-                repository.score = previousScore
-                canUndo = false
-                showMatrix()
-                showToast("Orqaga qaytarildi")
-            } else {
-                showToast("limit tugadi!")
-            }
-        }
 
         loadViews()
+        setupClickListeners()
+        setupTouchListener()
+        
+        presenter.onCreate()
+    }
 
-        val continiobtn = shared.getBoolean("has_saved", false)
-        if (continiobtn) {
-            val savedMatrix = shared.getString("saved_matrix", "") ?: ""
-            val savedScore = shared.getInt("saved_score", 0)
-            repository.setMatrixFromString(savedMatrix)
-            repository.score = savedScore
+    private fun setupClickListeners() {
+        binding.restarttxt.setOnClickListener {
+            presenter.onRestartClicked()
         }
+        binding.back.setOnClickListener {
+            presenter.onBackClicked()
+        }
+        binding.backtxt.setOnClickListener {
+            presenter.onUndoClicked()
+        }
+    }
 
-        val saveewcord = shared.getInt("record", 0)
-        binding.recordtxt.text = saveewcord.toString()
-
+    private fun setupTouchListener() {
         val myTouchListener = MyTouchListener(this)
         myTouchListener.setMoveSideListener {
-            MediaPlayer.create(this,R.raw.music_click).apply {
-                start()
-                setOnCompletionListener { release() }
-            }
-            saveCurrentStateBeforeMove()
-            when (it) {
-                SideEnum.DOWN -> {
-                    repository.moveToDown()
-                    checkGameStatus()
-                }
-
-                SideEnum.UP -> {
-                    repository.moveToUp()
-                    checkGameStatus()
-                }
-
-                SideEnum.RIGHT -> {
-                    repository.moveToRight()
-                    checkGameStatus()
-                }
-
-                SideEnum.LEFT -> {
-                    repository.moveToLeft()
-                    checkGameStatus()
-                }
-            }
+            presenter.onMove(it)
         }
-
         binding.container.setOnTouchListener(myTouchListener)
-        showMatrix()
     }
 
-    private fun saveCurrentStateBeforeMove() {
-        previousScore = repository.score
+    override fun showMatrix(matrix: Array<Array<Int>>, score: Int, record: Int) {
         for (i in 0 until 4) {
             for (j in 0 until 4) {
-                previousMatrix[i][j] = repository.matrix[i][j]
+                list[i * 4 + j].text = if (matrix[i][j] == 0) "" else matrix[i][j].toString()
+                list[i * 4 + j].setBackgroundResource(BackgroundUtil.getColorByAmount(matrix[i][j]))
             }
         }
-        canUndo = true
+        binding.currenttxt.text = score.toString()
+        binding.recordtxt.text = record.toString()
     }
 
-    private fun checkGameStatus() {
-        showMatrix()
-
-        var has2048 = false
-        for (i in 0 until 4) {
-            for (j in 0 until 4) {
-                if (repository.matrix[i][j] == 2048) {
-                    has2048 = true
-                    break
-                }
-            }
-        }
-
-        if (has2048 && !isWonDialogShown) {
-            isWonDialogShown = true
-            showWinDialog()
-            return
-        }
-
-        if (repository.checkMatrix()) {
-            showGameOverDialog()
-        }
+    override fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun showWinDialog() {
-        showCustomDialog(
-            "Tabriklaymiz!",
-            "Siz 2048 koshinini yig'dingiz va yutdingiz!\nSizning ochkongiz: ${repository.score}",
-            "Davom etish",
-            "OK",
-            onPositive = {
-                MediaPlayer.create(this,R.raw.music_click).apply {
-                    start()
-                    setOnCompletionListener { release() }
-                }
-                isWonDialogShown = true
-            },
-            onNegative = {
-                MediaPlayer.create(this,R.raw.music_click).apply {
-                    start()
-                    setOnCompletionListener { release() }
-                }
-            }
-        )
-    }
-
-    private fun showGameOverDialog() {
+    override fun showGameOverDialog(score: Int) {
         showCustomDialog(
             "O'yin tugadi!",
-            "Afsuski siz yutqazdingiz. Yana urinib ko'rasizmi?",
+            "Sizning ochkongiz: $score",
             "Qayta boshlash",
             "Menyu",
             onPositive = {
-                repository.restart()
-                isWonDialogShown = false
-                canUndo = false
-                showMatrix()
-                shared.edit().putBoolean("has_saved", false).apply()
+                presenter.onGameOverRestart()
             },
             onNegative = {
-                finish()
+                presenter.onGameOverMenu()
             }
         )
     }
 
-    private fun showCustomDialog(
+    override fun showCustomDialog(
         title: String,
         message: String,
         positiveText: String,
@@ -245,19 +117,13 @@ class game : AppCompatActivity() {
         dialogBinding.btnNegative.text = negativeText
 
         dialogBinding.btnPositive.setOnClickListener {
-            MediaPlayer.create(this,R.raw.music_click).apply {
-                start()
-                setOnCompletionListener { release() }
-            }
+            if (settings.isMusicEnabled) playSound()
             onPositive()
             dialog.dismiss()
         }
 
         dialogBinding.btnNegative.setOnClickListener {
-            MediaPlayer.create(this,R.raw.music_click).apply {
-                start()
-                setOnCompletionListener { release() }
-            }
+            if (settings.isMusicEnabled) playSound()
             onNegative()
             dialog.dismiss()
         }
@@ -265,17 +131,20 @@ class game : AppCompatActivity() {
         dialog.show()
     }
 
+    override fun closeGame() {
+        finish()
+    }
+
+    override fun playSound() {
+        MediaPlayer.create(this, R.raw.music_click)?.apply {
+            start()
+            setOnCompletionListener { release() }
+        }
+    }
+
     override fun onPause() {
         super.onPause()
-        val matrixString = repository.getMatrixAsString()
-        val currentScore = repository.score
-
-        shared.edit().apply {
-            putString("saved_matrix", matrixString)
-            putInt("saved_score", currentScore)
-            putBoolean("has_saved", true)
-            apply()
-        }
+        presenter.onPause()
     }
 
     private fun loadViews() {
@@ -286,24 +155,8 @@ class game : AppCompatActivity() {
         }
     }
 
-    private fun showMatrix() {
-        for (i in 0 until 4) {
-            for (j in 0 until 4) {
-                list[i * 4 + j].text = if (repository.matrix[i][j] == 0) ""
-                else repository.matrix[i][j].toString()
-
-                list[i * 4 + j].setBackgroundResource(BackgroundUtil.getColorByAmount(repository.matrix[i][j]))
-            }
-        }
-        binding.currenttxt.text = repository.score.toString()
-        val currentRecord = shared.getInt("record", 0)
-        if (repository.score > currentRecord) {
-            shared.edit().putInt("record", repository.score).apply()
-            binding.recordtxt.text = repository.score.toString()
-        }
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    override fun onDestroy() {
+        (presenter as? GamePresenter)?.onDestroy()
+        super.onDestroy()
     }
 }

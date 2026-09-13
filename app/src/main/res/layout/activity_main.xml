@@ -56,7 +56,7 @@
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:text="Continue"
-            android:textAllCaps="false"
+            android:textAllCaps="true"
             android:textColor="#706B5F"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -69,21 +69,47 @@
             app:strokeColor="#2A2A35"
             app:strokeWidth="1dp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/startbtn"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/jungleadvantures"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="New Game"
+                android:textAllCaps="true"
+                android:textColor="#706B5F"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:backgroundTint="#EBE3CB"
+                app:cornerRadius="14dp"
+                app:strokeColor="#2A2A35"
+                app:strokeWidth="1dp" />
+
+
+        </LinearLayout>
+
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/startbtn"
+            android:id="@+id/musicbtn"
             style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_marginBottom="12dp"
+            android:backgroundTint="#EBE3CB"
             android:fontFamily="@font/jungleadvantures"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:text="New Game"
-            android:textAllCaps="false"
+            android:text="Settings"
+            android:textAllCaps="true"
             android:textColor="#706B5F"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:backgroundTint="#EBE3CB"
             app:cornerRadius="14dp"
             app:strokeColor="#2A2A35"
             app:strokeWidth="1dp" />
@@ -117,7 +143,7 @@
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:text="Exit"
-            android:textAllCaps="false"
+            android:textAllCaps="true"
             android:textColor="#706B5F"
             android:textSize="18sp"
             android:textStyle="bold"

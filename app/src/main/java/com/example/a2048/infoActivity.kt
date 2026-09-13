@@ -12,29 +12,27 @@ import androidx.core.net.toUri
 
 class infoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityInfoBinding
+    private lateinit var settings: SettingsManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        settings = SettingsManager(this)
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
         binding.back.setOnClickListener {
-            MediaPlayer.create(this, R.raw.music_click)?.apply {
-                start()
-                setOnCompletionListener { release() }
-            }
+            playClickSound()
             finish()
         }
         binding.btnGithub.setOnClickListener {
-            MediaPlayer.create(this, R.raw.music_click)?.apply {
-                start()
-                setOnCompletionListener { release() }
-            }
+            playClickSound()
             startActivity(
                 Intent(
                     Intent.ACTION_VIEW,
@@ -43,10 +41,7 @@ class infoActivity : AppCompatActivity() {
             )
         }
         binding.btnTelegram.setOnClickListener {
-            MediaPlayer.create(this, R.raw.music_click)?.apply {
-                start()
-                setOnCompletionListener { release() }
-            }
+            playClickSound()
             startActivity(
                 Intent(
                     Intent.ACTION_VIEW,
@@ -55,16 +50,22 @@ class infoActivity : AppCompatActivity() {
             )
         }
         binding.btnLinkedIn.setOnClickListener {
-            MediaPlayer.create(this, R.raw.music_click)?.apply {
-                start()
-                setOnCompletionListener { release() }
-            }
+            playClickSound()
             startActivity(
                 Intent(
                     Intent.ACTION_VIEW,
                     "https://www.linkedin.com/in/shahzodbek-reyimboyev-206a05427?utm_source=share_via&utm_content=profile&utm_medium=member_android".toUri()
                 )
             )
+        }
+    }
+
+    private fun playClickSound() {
+        if (settings.isMusicEnabled) {
+            MediaPlayer.create(this, R.raw.music_click)?.apply {
+                start()
+                setOnCompletionListener { release() }
+            }
         }
     }
 }
