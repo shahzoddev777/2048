@@ -1,4 +1,4 @@
-package com.example.a2048
+package shahzod.proyekts.game2048
 
 import org.junit.Test
 

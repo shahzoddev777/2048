@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.a2048"
+    namespace = "shahzod.proyekts.game2048"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.example.a2048"
+        applicationId = "shahzod.proyekts.game2048"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -18,7 +18,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
